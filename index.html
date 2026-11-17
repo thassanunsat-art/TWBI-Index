@@ -129,7 +129,9 @@
 
   /* overview full page */
   .viz-full{width:100%;background:#fff}
-  .viz-full .tableauPlaceholder{width:100%}
+  .viz-full{padding:12px 0}
+  .viz-full .tableauPlaceholder{width:1000px;max-width:100%;margin:0 auto !important}
+  .viz-full iframe{margin:0 auto !important}
   .viz-open{text-align:right;padding:6px 20px;font-size:14px;height:34px}
   body[data-page="overview"] footer,body[data-page="methodology"] footer{display:none}
   .long-frame{width:100%;height:2400px;min-height:0;border:none;border-radius:0;display:block}
@@ -168,6 +170,9 @@
   .quote{border-left-color:var(--pink)}
   .nav li a:hover,.nav li a.active{background:linear-gradient(90deg,#dcf8f3,#e3efff);color:#1a6fd0}
   .cover-card .cap b{color:var(--pink)}
+
+  html.embedded body{min-height:0;background-attachment:scroll}
+  html.embedded header.nav{position:relative}
   footer{padding:40px 0 56px;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
   footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 </style>
@@ -319,11 +324,20 @@
 </footer>
 
 <script>
+  var EMBED=(function(){try{return window.self!==window.top;}catch(e){return true;}})();
+  if(EMBED) document.documentElement.classList.add('embedded');
+
   // Tableau embed, sized to fill the page under the nav bar
   (function(){
     var holder=document.getElementById('vizHolder');
     var vizElement=document.getElementById('viz1794888250977').getElementsByTagName('object')[0];
-    function size(){ vizElement.style.width='100%'; vizElement.style.height=(window.innerHeight-68-34)+'px'; }
+    function size(){
+      // dashboard is designed at a fixed 1000 x 827 px: keep that size and center it; shrink on small screens
+      var w=Math.min(1000, document.documentElement.clientWidth);
+      document.getElementById('viz1794888250977').style.width=w+'px';
+      vizElement.style.width=w+'px'; vizElement.style.height='827px';
+      [].forEach.call(document.querySelectorAll('#viz1794888250977 iframe'),function(f){ f.style.width=w+'px'; });
+    }
     size();
     var s=document.createElement('script'); s.src='https://public.tableau.com/javascripts/api/viz_v1.js';
     vizElement.parentNode.insertBefore(s,vizElement);
@@ -342,6 +356,7 @@
         if(on) [].forEach.call(p.querySelectorAll('iframe.embed-frame'),load); });
       links.forEach(function(a){ a.classList.toggle('active',a.getAttribute('href')==='#'+id); });
       window.scrollTo(0,0);
+      if(EMBED){ try{ parent.postMessage({type:'twbi-nav'},'*'); }catch(e){} }
     }
     window.addEventListener('hashchange',show); show();
     document.querySelector('.brand').addEventListener('click',function(e){e.preventDefault();location.hash='background';});
@@ -351,6 +366,19 @@
     function mh(){ var w=window.innerWidth;
       mf.style.height=(w>=1200?2400:w>=900?2900:w>=600?3700:5000)+'px'; }
     mh(); window.addEventListener('resize',mh);
+  })();
+
+  // When embedded (e.g. Raw HTML iframe), report content height to the parent page
+  (function(){
+    if(!EMBED) return;
+    var last=0;
+    function report(){
+      var h=Math.ceil(document.body.getBoundingClientRect().height);
+      if(Math.abs(h-last)>2){ last=h; try{ parent.postMessage({type:'twbi-height',height:h},'*'); }catch(e){} }
+    }
+    if(window.ResizeObserver) new ResizeObserver(report).observe(document.body);
+    window.addEventListener('load',report); window.addEventListener('hashchange',function(){setTimeout(report,50);});
+    setInterval(report,1000); report();
   })();
 </script>
 </body>
