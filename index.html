@@ -130,8 +130,7 @@
   /* overview full page */
   .viz-full{width:100%;background:#fff}
   .viz-full{padding:12px 0}
-  .viz-full .tableauPlaceholder{width:1000px;max-width:100%;margin:0 auto !important}
-  .viz-full iframe{margin:0 auto !important}
+  .tableau-frame{display:block;width:1000px;max-width:100%;height:830px;border:0;margin:0 auto;background:#fff}
   .viz-open{text-align:right;padding:6px 20px;font-size:14px;height:34px}
   body[data-page="overview"] footer,body[data-page="methodology"] footer{display:none}
   .long-frame{width:100%;height:2400px;min-height:0;border:none;border-radius:0;display:block}
@@ -253,26 +252,11 @@
   <!-- 2 -->
   <div class="page" data-page="overview">
     <div class="viz-full" id="vizHolder">
-      <div class='tableauPlaceholder' id='viz1794888250977' style='position: relative'>
-        <noscript><a href='https://infocenter.nationalhealth.or.th/'><img alt='ดัชนีความอยู่ดีมีสุขของประเทศไทย (Thailand Well-being Index, TWBI) ' src='https://public.tableau.com/static/images/FT/FTFBXMWC9/1_rss.png' style='border: none' /></a></noscript>
-        <object class='tableauViz' style='display:none;'>
-          <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
-          <param name='embed_code_version' value='3' />
-          <param name='path' value='shared&#47;FTFBXMWC9' />
-          <param name='toolbar' value='yes' />
-          <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;FT&#47;FTFBXMWC9&#47;1.png' />
-          <param name='animate_transition' value='yes' />
-          <param name='display_static_image' value='yes' />
-          <param name='display_spinner' value='yes' />
-          <param name='display_overlay' value='yes' />
-          <param name='display_count' value='yes' />
-          <param name='tabs' value='no' />
-          <param name='language' value='th-TH' />
-          <param name='filter' value='publish=yes' />
-        </object>
-      </div>
+      <iframe class="tableau-frame" title="ดัชนีความอยู่ดีมีสุขของประเทศไทย (Thailand Well-being Index, TWBI)"
+        src="https://public.tableau.com/views/TWBI/Story1?:language=th-TH&amp;:embed=y&amp;:showVizHome=no&amp;:display_count=y&amp;:toolbar=yes&amp;:tabs=no&amp;publish=yes"
+        allowfullscreen></iframe>
     </div>
-    <div class="viz-open"><a href="https://public.tableau.com/shared/FTFBXMWC9?:display_count=y&:origin=viz_share_link&:language=th-TH" target="_blank" rel="noopener">เปิดแดชบอร์ดบน Tableau Public ↗</a></div>
+    <div class="viz-open"><a href="https://public.tableau.com/views/TWBI/Story1?:language=th-TH&amp;:display_count=y&amp;publish=yes" target="_blank" rel="noopener">เปิดแดชบอร์ดบน Tableau Public ↗</a></div>
   </div>
 
   <!-- 3 -->
@@ -326,23 +310,6 @@
 <script>
   var EMBED=(function(){try{return window.self!==window.top;}catch(e){return true;}})();
   if(EMBED) document.documentElement.classList.add('embedded');
-
-  // Tableau embed, sized to fill the page under the nav bar
-  (function(){
-    var holder=document.getElementById('vizHolder');
-    var vizElement=document.getElementById('viz1794888250977').getElementsByTagName('object')[0];
-    function size(){
-      // dashboard is designed at a fixed 1000 x 827 px: keep that size and center it; shrink on small screens
-      var w=Math.min(1000, document.documentElement.clientWidth);
-      document.getElementById('viz1794888250977').style.width=w+'px';
-      vizElement.style.width=w+'px'; vizElement.style.height='827px';
-      [].forEach.call(document.querySelectorAll('#viz1794888250977 iframe'),function(f){ f.style.width=w+'px'; });
-    }
-    size();
-    var s=document.createElement('script'); s.src='https://public.tableau.com/javascripts/api/viz_v1.js';
-    vizElement.parentNode.insertBefore(s,vizElement);
-    window.addEventListener('resize',size);
-  })();
 
   // Page router (#background, #overview, #manuals, #classroom, #methodology)
   (function(){
